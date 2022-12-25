@@ -9,16 +9,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val pagerAdapter: BoardingViewPagerAdapter by lazy {
         BoardingViewPagerAdapter(
             context = this,
-            listBoarding = getListItemBoarding(),
-            onNextClicked = { position ->
-                when(position) {
-                    pagerAdapter.count.minus(1) -> {
-                        HomeActivity.start(this)
-                        finish()
-                    }
-                    else -> binding.viewPager.currentItem = position.plus(1)
-                }
-            }
+            listBoarding = getListItemBoarding()
         )
     }
 
@@ -32,7 +23,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.viewPager.adapter = pagerAdapter
     }
 
-    override fun setupAction() {}
+    override fun setupAction() {
+        binding.btnNext.setOnClickListener {
+            when(val position = binding.viewPager.currentItem) {
+                pagerAdapter.count.minus(1) -> {
+                    HomeActivity.start(this)
+                    finish()
+                }
+                else -> binding.viewPager.currentItem = position.plus(1)
+            }
+        }
+    }
 
     override fun setupProcess() {}
 

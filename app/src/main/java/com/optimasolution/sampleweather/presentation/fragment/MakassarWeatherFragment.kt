@@ -82,7 +82,9 @@ class MakassarWeatherFragment : BaseFragment<FragmentMakassarWeatherBinding>() {
             },
             onSuccess = {
                 dismissDialog()
-                val list = it.sortedBy { id }
+                val list = it.sortedBy { response ->
+                    response.id
+                }
                 hourlyForecastAdapter.submitList(list)
             }
         )

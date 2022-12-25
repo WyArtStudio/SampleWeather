@@ -5,16 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.PagerAdapter
 import com.optimasolution.sampleweather.R
 import com.optimasolution.sampleweather.databinding.LayoutItemBoardingBinding
 
 class BoardingViewPagerAdapter(
     private val context: Context,
-    private var listBoarding: List<BoardingItem>,
-    private val onNextClicked: ((Int) -> Unit)?
+    private var listBoarding: List<BoardingItem>
 ) : PagerAdapter() {
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -38,10 +35,6 @@ class BoardingViewPagerAdapter(
                 imgIndicatorTwo.setIndicatorSelection(isIndicatorTwoSelected)
                 imgIndicatorThree.setIndicatorSelection(isIndicatorThreeSelected)
                 imgWeather.setImageResource(image)
-
-                btnNext.setOnClickListener {
-                    onNextClicked?.invoke(position)
-                }
             }
         }
 
