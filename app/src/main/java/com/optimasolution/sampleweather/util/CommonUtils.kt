@@ -4,13 +4,18 @@ import android.app.AlertDialog.Builder
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.optimasolution.sampleweather.R
 import com.optimasolution.sampleweather.domain.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +46,8 @@ fun String.orEmptyItemString(): String {
 }
 
 fun String.addBearerToken(): String = "Bearer $this"
+
+fun String.toQuery(): String = "eq.$this"
 
 fun showAlertDialog(context: Context, message: String, onPositiveClick: () -> Unit) {
     val builder = Builder(context)
@@ -110,4 +117,26 @@ fun <T> LiveData<Resource<T>>.observe(
             else -> onError.invoke(it.errorMessage.orEmpty())
         }
     }
+}
+
+fun ImageView.setImageWeather(status: String) {
+    this.setImageResource(
+        when(status) {
+            CLOUDY -> R.drawable.ic_cloudy_small
+            SUNNY_RAIN -> R.drawable.img_weather_sunny_rain_medium
+            RAIN -> R.drawable.ic_rain_small
+            STORMY -> R.drawable.ic_stormy_small
+            STORMY_RAIN -> R.drawable.ic_stormy_rain_small
+            else -> R.drawable.ic_sunny_small
+        }
+    )
+}
+
+fun hasNetwork(context: Context): Boolean? {
+    var isConnected: Boolean? = false
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+    if (activeNetwork != null && activeNetwork.isConnected)
+        isConnected = true
+    return isConnected
 }

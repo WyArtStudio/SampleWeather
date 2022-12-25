@@ -1,26 +1,25 @@
 package com.optimasolution.sampleweather.presentation
 
-import android.content.Context
-import android.content.Intent
+import com.optimasolution.sampleweather.R
 import com.optimasolution.sampleweather.base.BaseActivity
 import com.optimasolution.sampleweather.databinding.ActivityMainBinding
-import com.optimasolution.sampleweather.domain.weather.model.Weather
-import com.optimasolution.sampleweather.util.API_KEY
-import com.optimasolution.sampleweather.util.TOKEN
-import com.optimasolution.sampleweather.util.observe
-import com.optimasolution.sampleweather.util.showShortToast
-import com.optimasolution.sampleweather.viewmodel.WeatherViewModel
-import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private val weatherViewModel: WeatherViewModel by inject()
-
-    companion object {
-        fun start(context: Context) {
-            val intent = Intent(context, MainActivity::class.java)
-            context.startActivity(intent)
-        }
+    private val pagerAdapter: BoardingViewPagerAdapter by lazy {
+        BoardingViewPagerAdapter(
+            context = this,
+            listBoarding = getListItemBoarding(),
+            onNextClicked = { position ->
+                when(position) {
+                    pagerAdapter.count.minus(1) -> {
+                        HomeActivity.start(this)
+                        finish()
+                    }
+                    else -> binding.viewPager.currentItem = position.plus(1)
+                }
+            }
+        )
     }
 
     override fun getViewBinding(): ActivityMainBinding {
@@ -29,35 +28,39 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setupIntent() {}
 
-    override fun setupUI() {}
+    override fun setupUI() {
+        binding.viewPager.adapter = pagerAdapter
+    }
 
     override fun setupAction() {}
 
-    override fun setupProcess() {
-        weatherViewModel.getListWeather(API_KEY, TOKEN)
-    }
+    override fun setupProcess() {}
 
-    override fun setupObserver() {
-        weatherViewModel.listWeather.observe(this,
-            onLoading = {
-                showCancelableDialog("Loading...")
-            },
-            onError = {
-                showShortToast("Error: $it")
-            },
-            onSuccess = {
-                dismissDialog()
-                val weather = it.first()
-                updateUI(weather)
-            }
+    override fun setupObserver() {}
+
+    private fun getListItemBoarding(): List<BoardingItem> {
+        return listOf(
+            BoardingItem(
+                label = "WEATHER FOR EACH CITY",
+                isIndicatorOneSelected = true,
+                isIndicatorTwoSelected = false,
+                isIndicatorThreeSelected = false,
+                image = R.drawable.img_weather_sunny_large
+            ),
+            BoardingItem(
+                label = "EASY TO USE",
+                isIndicatorOneSelected = false,
+                isIndicatorTwoSelected = true,
+                isIndicatorThreeSelected = false,
+                image = R.drawable.img_weather_raining_large
+            ),
+            BoardingItem(
+                label = "CHECK THE WEATHER ANYWHERE",
+                isIndicatorOneSelected = false,
+                isIndicatorTwoSelected = false,
+                isIndicatorThreeSelected = true,
+                image = R.drawable.img_weather_stormy_large
+            )
         )
-    }
-
-    private fun updateUI(weather: Weather) {
-        with(binding) {
-            tvId.text = "Id: ${weather.id}"
-            tvCreatedAt.text = "Created at: ${weather.createdAt}"
-            tvTemperature.text = "Temperature: ${weather.temperature} celcius"
-        }
     }
 }

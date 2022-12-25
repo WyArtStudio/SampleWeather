@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Sample Weather</string>
+    <string name="app_name">Weather App</string>
     <string name="label_error">Error</string>
     <string name="action_retry">Retry</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

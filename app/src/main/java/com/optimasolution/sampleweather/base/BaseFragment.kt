@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.optimasolution.sampleweather.R
+import com.optimasolution.sampleweather.util.showCancelableDialog
+import com.optimasolution.sampleweather.util.showNoCancelableDialog
 import org.koin.android.ext.android.inject
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
@@ -58,6 +60,14 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
 
     protected fun dismissLoading() {
         loadingDialog?.dismiss()
+    }
+
+    protected fun showCancelableDialog(message: String) {
+        dialog.showCancelableDialog(message)
+    }
+
+    protected fun showNonCancelableDialog(message: String) {
+        dialog.showNoCancelableDialog(message)
     }
 
     protected fun showErrorDialog(message: String, onRetry: () -> Unit) {

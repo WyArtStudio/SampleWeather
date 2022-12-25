@@ -9,6 +9,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import retrofit2.Response
+import java.io.IOException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 fun <T, U> Flow<ApiResult<T>>.mapToDomain(mapper: (T) -> U): Flow<Resource<U>> =
     this.map {
@@ -35,6 +39,14 @@ fun <T> Response<T>.call(): Flow<ApiResult<T>> =
                     emit(ApiResult.Error(errorResponse.code, message))
                 }
             }
+        } catch (e: UnknownHostException) {
+            emit(ApiResult.Error(999, "CODE 999: \n${e.message.orEmpty()}"))
+        } catch (e: ConnectException) {
+            emit(ApiResult.Error(999, "CODE 999: \n${e.message.orEmpty()}"))
+        } catch (e: SocketTimeoutException) {
+            emit(ApiResult.Error(999, "CODE 999: \n${e.message.orEmpty()}"))
+        } catch (e: IOException) {
+            emit(ApiResult.Error(999, "CODE 999: \n${e.message.orEmpty()}"))
         } catch (e: Exception) {
             emit(ApiResult.Error(999, "CODE 999: \n${e.message.orEmpty()}"))
         }

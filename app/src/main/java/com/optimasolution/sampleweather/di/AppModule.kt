@@ -25,7 +25,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit.SECONDS
 
 val networkModule = module {
     factory { CompositeDisposable() }
@@ -56,16 +55,12 @@ val networkModule = module {
     single {
         OkHttpClient.Builder()
             .cache(cache(get()))
-            .addInterceptor(interceptor = get(named(httpLogging)))
-            .addInterceptor(interceptor = get(named(chuckerLogging)))
             .addInterceptor { chain ->
                 // Get the request from the chain.
                 val request = chain.request()
                 request.newBuilder().header("Cache-Control", "public, max-age=" + 10).build()
                 chain.proceed(request)
             }
-            .connectTimeout(120, SECONDS)
-            .connectTimeout(120, SECONDS)
             .build()
     }
 
