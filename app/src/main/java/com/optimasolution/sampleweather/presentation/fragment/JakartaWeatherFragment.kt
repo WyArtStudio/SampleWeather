@@ -10,10 +10,12 @@ import com.optimasolution.sampleweather.presentation.HourlyForecastAdapter
 import com.optimasolution.sampleweather.presentation.SevenDaysForecastAdapter
 import com.optimasolution.sampleweather.util.API_KEY
 import com.optimasolution.sampleweather.util.TOKEN
+import com.optimasolution.sampleweather.util.getCurrentDateTime
 import com.optimasolution.sampleweather.util.gone
 import com.optimasolution.sampleweather.util.hasNetwork
 import com.optimasolution.sampleweather.util.observe
 import com.optimasolution.sampleweather.util.showShortToast
+import com.optimasolution.sampleweather.util.toString
 import com.optimasolution.sampleweather.util.visible
 import com.optimasolution.sampleweather.viewmodel.WeatherViewModel
 import org.koin.android.ext.android.inject
@@ -39,6 +41,9 @@ class JakartaWeatherFragment : BaseFragment<FragmentJakartaWeatherBinding>() {
             adapter = sevenDaysForecastAdapter
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
+
+        val date = getCurrentDateTime()
+        binding.tvDate.text = date.toString("d MMMM yyyy")
 
         loadData()
     }

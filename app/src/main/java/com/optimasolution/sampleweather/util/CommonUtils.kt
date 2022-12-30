@@ -20,6 +20,10 @@ import com.optimasolution.sampleweather.domain.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 fun emptyString(): String = ""
 
@@ -139,4 +143,13 @@ fun hasNetwork(context: Context): Boolean? {
     if (activeNetwork != null && activeNetwork.isConnected)
         isConnected = true
     return isConnected
+}
+
+fun Date.toString(format: String, locale: Locale = Locale("id", "ID")): String {
+    val formatter = SimpleDateFormat(format, locale)
+    return formatter.format(this)
+}
+
+fun getCurrentDateTime(): Date {
+    return Calendar.getInstance().time
 }
