@@ -153,3 +153,7 @@ fun Date.toString(format: String, locale: Locale = Locale("id", "ID")): String {
 fun getCurrentDateTime(): Date {
     return Calendar.getInstance().time
 }
+
+fun getCurrentDateInString(): String {
+    return getCurrentDateTime().toString("d MMMM yyyy")
+}
